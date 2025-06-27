@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %}Profile{% endblock %} {% block
+content %}
+<div class="profile-cards">
+  {% for profile in profiles %}
+  <div class="profile col border border-light rounded-5 container-sm px-5">
+    <a
+      href="/about/{{profile.name | lower | replace(' ','-')}}"
+      class="text-decoration-none text-reset"
+    >
+      <div class="profile-picture">
+        <img
+          src="{{url_for('static', filename=profile.profile_picture)}}"
+          alt="Profile Picture"
+        />
+      </div>
+      <h2 class="profile-name">{{ profile.name }}</h2>
+      <p class="profile-short-bio">{{profile.short_bio}}</p>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

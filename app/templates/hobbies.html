@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block title %}{{title}}{% endblock %}
+{% block content %}
+
+<div class="container carousel-container justify-content-center">
+
+  <div id="carousel" class="carousel slide ">
+    <div class="carousel-inner ">
+      {% for hobby in profile.hobbies %}
+        {% if loop.first %}
+      <div class="carousel-item active ">
+        {% else %}
+      <div class="carousel-item">
+        {% endif %}
+        <div class="card img-fluid hobby-card mt-5">
+            <img src="{{ url_for('static', filename=profile.hobbies[loop.index0][1]) }}"
+                 class="card-img-top img-thumbnail hobby-img mx-auto mt-5"
+                 alt="{{ profile.hobbies[loop.index0][0] }}">
+            <div class="card-body container w-50 hobby-text shadow rounded text-light my-2">
+              <h5 class="card-title text-center">{{ profile.hobbies[loop.index0][0] }}</h5>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon bg-secondary" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon bg-secondary" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+
+{% endblock %}
