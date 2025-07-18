@@ -6,6 +6,7 @@ from peewee import *
 import datetime
 from playhouse.shortcuts import model_to_dict
 from flask_gravatar import Gravatar
+import re
 
 load_dotenv(dotenv_path="./.env")
 app = Flask(__name__)
@@ -18,13 +19,17 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=True,
                     base_url=None)
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
 
-mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
-                    user=os.getenv("MYSQL_USER"),
-                    password=os.getenv("MYSQL_PASSWORD"),
-                    host=os.getenv("MYSQL_HOST"),
-                    port=3306
-                    )
+else:
+    mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
+                        user=os.getenv("MYSQL_USER"),
+                        password=os.getenv("MYSQL_PASSWORD"),
+                        host=os.getenv("MYSQL_HOST"),
+                        port=3306
+                        )
 
 class TimelinePost(Model):
     name = CharField()
@@ -78,7 +83,18 @@ def timeline():
 
 @app.route('/api/timeline_post', methods=["POST"])
 def post_time_line_post():
-    print(request.form)
+    if 'name' not in request.form or request.form['name'].strip() == "":
+        return "Invalid name", 400
+    
+    if 'email' not in request.form or request.form['email'].strip() == "":
+        return "Invalid email", 400
+    
+    if not re.search(r'(.+?)@(.+?)\.(.+?)', request.form['email']):
+        return "Invalid email", 400
+    
+    if 'content' not in request.form or request.form['content'].strip() == "":
+        return "Invalid content", 400
+    
     name = request.form['name']
     email = request.form['email']
     content = request.form['content']
