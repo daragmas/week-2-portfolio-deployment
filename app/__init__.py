@@ -7,7 +7,7 @@ import datetime
 from playhouse.shortcuts import model_to_dict
 from flask_gravatar import Gravatar
 
-load_dotenv(dotenv_path="./example.env")
+load_dotenv(dotenv_path="./.env")
 app = Flask(__name__)
 
 gravatar = Gravatar(app,
