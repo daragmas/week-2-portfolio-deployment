@@ -8,7 +8,7 @@ from playhouse.shortcuts import model_to_dict
 from flask_gravatar import Gravatar
 import re
 
-load_dotenv(dotenv_path="./.env")
+load_dotenv()
 app = Flask(__name__)
 
 gravatar = Gravatar(app,
@@ -19,6 +19,7 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=True,
                     base_url=None)
+
 if os.getenv("TESTING") == "true":
     print("Running in test mode")
     mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
@@ -84,7 +85,7 @@ def timeline():
 @app.route('/api/timeline_post', methods=["POST"])
 def post_time_line_post():
     if 'name' not in request.form or request.form['name'].strip() == "":
-        return "Invalid name", 400
+        return "Invalid Name", 400
     
     if 'email' not in request.form or request.form['email'].strip() == "":
         return "Invalid email", 400

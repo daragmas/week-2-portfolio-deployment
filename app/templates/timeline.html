@@ -6,7 +6,7 @@
 
     {% if timelinePosts %}
     {% for post in timelinePosts %}
-    <div class="row mb-3 p-3 border rounded shadow-sm bg-light">
+    <div id="timeline-posts" class="row mb-3 p-3 border rounded shadow-sm bg-light">
         <!-- Left Column: Gravatar + Name/Email -->
         <div class="col-md-3 d-flex align-items-start">
             <img src="{{ gravatar(post.email) }}" class="rounded-circle me-3" width="60" height="60" alt="Avatar">
@@ -27,20 +27,45 @@
     <p>No posts yet.</p>
     {% endif %}
 
-    <form action="{{ url_for('post_time_line_post') }}" method="post">
+    <form id="timeline-form" action="/api/timeline_post" method="POST">
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name">
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email">
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Post</label>
-            <input type="text" class="form-control" id="content">
+            <input type="text" class="form-control" id="content" name="content" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('timeline-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent page reload
+
+            const form = event.target;
+            const formData = new FormData(form);
+            console.log(formData)
+
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                form.reset();
+                location.reload();
+            } else {
+                alert('Failed to submit post.');
+            }
+        });
+    });
+</script>
+
 {% endblock %}
