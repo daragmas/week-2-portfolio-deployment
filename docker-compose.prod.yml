@@ -20,7 +20,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: jonasal/nginx-certbot:lastest
+    image: jonasal/nginx-certbot
     restart: always
     environment:
       - CERTBOT_EMAIL=natepwolf@gmail.com
